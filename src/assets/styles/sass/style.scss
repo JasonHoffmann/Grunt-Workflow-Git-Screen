@@ -1,0 +1,22 @@
+@import '_partials/_fonts';
+
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-family: Helvetica, sans-serif;
+  font-size: 100%;
+  text-align: center;
+}
+
+.container {
+  width: 90%;
+  margin: 20px auto;
+  padding: 30px 10px;
+}
+
+h1, h2 {
+  margin: 0;
+  color: #333;
+  text-align: center;
+}
