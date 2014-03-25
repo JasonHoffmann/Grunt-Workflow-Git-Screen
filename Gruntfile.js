@@ -79,10 +79,6 @@ module.exports = function (grunt) {
     */
 
     watch: {
-      livereload: {
-        files: [ '<%= local %>/**/*.*' ],
-        options: { livereload: true }
-      },
       sass: {
         files: [
           '<%= local %>/assets/styles/sass/**/*.{scss,sass}',
