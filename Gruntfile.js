@@ -133,15 +133,9 @@ module.exports = function (grunt) {
         options: {
           questions: [
             {
-              config: 'echo.input',
+              config: 'gitmessage',
               type: 'input',
-              message: 'Commit Message',
-              validate: function(value) {
-              if (value === '') {
-                return 'A value is required.';
-              }
-                return true;
-              }
+              message: 'Commit Message'
             }
           ]
         }
@@ -157,12 +151,15 @@ module.exports = function (grunt) {
       },
 
       commit: {
-        command: 'git commit -m' + grunt.config('echo.input'),
+        command: function() {
+          var message = grunt.config('gitmessage');
+          return 'git commit -am ' + message;
+        },
         options: {
           stdout: true
         }
-        }
-      },
+      }
+    },
 
   })
 
