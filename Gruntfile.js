@@ -128,40 +128,40 @@ module.exports = function (grunt) {
     *  Use 'git add .' and 'git commit -am' to commit changes
     */
     
-    prompt: {
-      commit: {
-        options: {
-          questions: [
-            {
-              config: 'gitmessage',
-              type: 'input',
-              message: 'Commit Message'
-            }
-          ]
-        }
-      }
-    },
-
-    shell: {
-      addall: {
-        command: 'git add .',
-        options: {
-          stdout: true
+      prompt: {
+        commit: {
+          options: {
+            questions: [
+              {
+                config: 'gitmessage',
+                type: 'input',
+                message: 'Commit Message'
+              }
+            ]
+          }
         }
       },
 
-      commit: {
-        command: function() {
-          var message = grunt.config('gitmessage');
-          return 'git commit -am ' + message;
+      shell: {
+        addall: {
+          command: 'git add .',
+          options: {
+            stdout: true
+          }
         },
-        options: {
-          stdout: true
-        }
-      }
-    },
 
-  })
+        commit: {
+          command: function() {
+            var message = grunt.config('gitmessage');
+            return "git commit -am '" + message + "'";
+          },
+          options: {
+            stdout: true
+          }
+        }
+      },
+
+    })
 
 grunt.loadNpmTasks('grunt-contrib-concat');
 grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -178,10 +178,6 @@ grunt.loadNpmTasks('grunt-shell');
 grunt.loadNpmTasks('grunt-prompt');
 grunt.loadNpmTasks('grunt-localscreenshots');
 
-
-
-
-grunt.registerTask('test', ['watch'])
 grunt.registerTask('styles', ['sass'])
 grunt.registerTask('git', ['prompt', 'shell'])
 grunt.registerTask('server', ['connect', 'open', 'watch'])
