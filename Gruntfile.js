@@ -82,10 +82,11 @@ module.exports = function (grunt) {
 
     /*  
     *  Setting up the server, live reloading and opening up the page
-    *  Files will be watched for livereload, SASS files will be automatically compiled when changed
+    *  Files will be watched for livereload, SASS files will be automatically compiled when changed, as will scripts and HTML
     */
 
     watch: {
+      
       options: {
         livereload: true
       },
@@ -103,8 +104,19 @@ module.exports = function (grunt) {
         options: {
           spawn: false,
         }
+      },
+
+      html: {
+        files: ['<%= local %>/*.html'],
+        tasks: ['htmlmin'],
+        options: {
+          spawn: false
+        }
       }
+
     },
+
+
 
     connect: {
       server: {
@@ -194,7 +206,6 @@ grunt.loadNpmTasks('grunt-prompt');
 grunt.loadNpmTasks('grunt-localscreenshots');
 
 
-grunt.registerTask('test', ['htmlmin'])
 grunt.registerTask('styles', ['sass'])
 grunt.registerTask('git', ['prompt', 'shell'])
 grunt.registerTask('server', ['connect', 'open', 'watch'])
