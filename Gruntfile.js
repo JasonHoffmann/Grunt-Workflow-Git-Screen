@@ -11,8 +11,22 @@ module.exports = function (grunt) {
 
 
     /*  
-    *  Basic Compression and JS Hinting for project files + SASS concat task
+    *  Basic Compression and Minificaiton, Image Optimization and SASS and Scripts concatenation
     */
+
+    htmlmin: {
+      dist: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true,
+          caseSensitive: true
+        },
+      expand: true,
+      cwd: '<%= local %>/',
+      src: ['*.html'],
+      dest: '<%= dest %>/'
+      }
+    },
 
     concat: {
       dist: {
@@ -163,6 +177,7 @@ module.exports = function (grunt) {
 
     })
 
+grunt.loadNpmTasks('grunt-contrib-htmlmin');
 grunt.loadNpmTasks('grunt-contrib-concat');
 grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-contrib-imagemin');
@@ -178,6 +193,8 @@ grunt.loadNpmTasks('grunt-shell');
 grunt.loadNpmTasks('grunt-prompt');
 grunt.loadNpmTasks('grunt-localscreenshots');
 
+
+grunt.registerTask('test', ['htmlmin'])
 grunt.registerTask('styles', ['sass'])
 grunt.registerTask('git', ['prompt', 'shell'])
 grunt.registerTask('server', ['connect', 'open', 'watch'])
