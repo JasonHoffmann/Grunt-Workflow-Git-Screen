@@ -1,0 +1,6 @@
+.DS_Store
+.sass-cache/
+node_modules/
+screenshots/
+src/assets/styles/style.css
+src/assets/styles/.DS_Store
