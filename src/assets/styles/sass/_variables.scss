@@ -2,10 +2,10 @@
    Typography
    ========================================================================== */
 
-$alpha : 2em;
+$alpha : 3em;
 $beta : 1.5em;
 $gamma : 1.17em;
-$delta : 1em;
+$delta : 1.5em;
 $epsilon : .83em;
 $zeta : .67em;
 
@@ -33,3 +33,7 @@ $grayE: #e6e6e6;
 $gray3: #333;
 $black: #000;
 $white: #FFF;
+
+body {
+	background: #fff!important;
+}

@@ -1,3 +1,3 @@
 (function() {
 
-}).apply(this)
+})(jQuery);

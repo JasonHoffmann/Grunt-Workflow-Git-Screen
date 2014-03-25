@@ -1,12 +1,11 @@
 module.exports = function (grunt) {
   "use strict";
 
-  require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
-
   grunt.initConfig({
 
     /* Set this to the relative path of your project's index.html file */
     local: 'src',
+    dest: 'build',
 
     pkg: grunt.file.readJSON('package.json'),
 
@@ -15,33 +14,21 @@ module.exports = function (grunt) {
     *  Basic Compression and JS Hinting for project files + SASS concat task
     */
 
-    jshint: {
-      options: {
-        force: true,
-        curly: true,
-        eqeqeq: true,
-        immed: true,
-        latedef: true,
-        newcap: true,
-        noarg: true,
-        sub: true,
-        undef: true,
-        boss: true,
-        eqnull: true,
-        browser: true,
-        asi: true,
-        globals: {
-          console: true,
-          require: true,
-          module: true
-        }
-      },
-      files: [
-        'Gruntfile.js',
-        'package.json',
-        'config.json',
-        '<%= local %>/**/*.js'
-      ]
+    concat: {
+      dist: {
+        src: [
+          '<%= local %>/assets/scripts/vendor/*.js',
+          '<%= local %>/assets/scripts/*.js'
+        ],
+        dest: '<%= dest %>/js/app.js',
+      }
+    },
+
+    uglify: {
+      build: {
+        src: '<%= dest %>/js/app.js',
+        dest: '<%= dest %>/js/app.min.js'
+      }
     },
 
     imagemin: {
@@ -55,7 +42,7 @@ module.exports = function (grunt) {
             expand: true,
             cwd: '<%= local %>/assets/images/ %>',
             src: ['**/*.{png,jpg,jpeg,gif,svg}'],
-            dest: '<%= local %>/assets/images/ %>'
+            dest: '<%= dest %>/images/ %>'
           }
         ]
       }
@@ -67,9 +54,15 @@ module.exports = function (grunt) {
           style: 'compressed'
         },
         files: {
-          '<%= local %>/assets/styles/style.css': '<%= local %>/assets/styles/sass/style.scss'
+          '<%= dest %>/styles/style.css': '<%= local %>/assets/styles/style.scss'
         },
       }
+    },
+
+    autoprefixer: {
+      file: {
+        src: '<%= dest %>/styles/style.css'
+      },
     },
 
 
@@ -79,18 +72,29 @@ module.exports = function (grunt) {
     */
 
     watch: {
-      sass: {
-        files: [
-          '<%= local %>/assets/styles/sass/**/*.{scss,sass}',
-          '<%= local %>/assets/styles/sass/_partials/**/*.{scss,sass}'
-        ],
-        tasks: ['styles']
+      options: {
+        livereload: true
+      },
+      scripts: {
+        files: ['<%= local %>/assets/scripts/*.js'],
+        tasks: ['concat', 'uglify'],
+        options: {
+          spawn: false,
+        }
+      },
+
+      css: {
+        files: ['<%= local %>/assets/styles/sass/**/*.scss'],
+        tasks: ['sass', 'autoprefixer'],
+        options: {
+          spawn: false,
+        }
       }
     },
 
     connect: {
       server: {
-        options: { port: '3000', base: '<%= local %>' }
+        options: { port: '3000', base: '<%= dest %>' }
       }
     },
 
@@ -115,7 +119,7 @@ module.exports = function (grunt) {
         },
         viewport: ['600x800', '768x1024', '1024x1024'],
       },
-      src: ['<%= local %>/*.html']
+      src: ['<%= dest %>/*.html']
     },
 
 
@@ -153,9 +157,7 @@ module.exports = function (grunt) {
       },
 
       commit: {
-        command: function() {
-                      return ('git commit -am' + grunt.config('echo.input') + ';');
-                    },
+        command: 'git commit -m' + grunt.config('echo.input'),
         options: {
           stdout: true
         }
@@ -164,6 +166,25 @@ module.exports = function (grunt) {
 
   })
 
+grunt.loadNpmTasks('grunt-contrib-concat');
+grunt.loadNpmTasks('grunt-contrib-uglify');
+grunt.loadNpmTasks('grunt-contrib-imagemin');
+
+grunt.loadNpmTasks('grunt-contrib-watch');
+grunt.loadNpmTasks('grunt-contrib-connect');
+grunt.loadNpmTasks('grunt-open');
+
+grunt.loadNpmTasks('grunt-contrib-sass');
+grunt.loadNpmTasks('grunt-autoprefixer');
+
+grunt.loadNpmTasks('grunt-shell');
+grunt.loadNpmTasks('grunt-prompt');
+grunt.loadNpmTasks('grunt-localscreenshots');
+
+
+
+
+grunt.registerTask('test', ['watch'])
 grunt.registerTask('styles', ['sass'])
 grunt.registerTask('git', ['prompt', 'shell'])
 grunt.registerTask('server', ['connect', 'open', 'watch'])
