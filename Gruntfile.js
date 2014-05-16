@@ -54,10 +54,18 @@ module.exports = function (grunt) {
         files: [
           {
             expand: true,
-            cwd: '<%= local %>/assets/images/ %>',
+            cwd: '<%= dest %>/images/ %>',
             src: ['**/*.{png,jpg,jpeg,gif,svg}'],
             dest: '<%= dest %>/images/ %>'
           }
+        ]
+      }
+    },
+
+    copy: {
+      images: {
+        files: [
+        {expand: true, cwd: '<%= local %>/assets/images', src: ['**'], dest: '<%= dest %>/images/'}
         ]
       }
     },
@@ -109,6 +117,14 @@ module.exports = function (grunt) {
       html: {
         files: ['<%= local %>/*.html'],
         tasks: ['htmlmin'],
+        options: {
+          spawn: false
+        }
+      },
+
+      images: {
+        files: ['<%= local %>/assets/images/*.{png,jpg,jpeg,gif,svg}'],
+        tasks: ['copy', 'imagemin'],
         options: {
           spawn: false
         }
@@ -193,6 +209,7 @@ grunt.loadNpmTasks('grunt-contrib-htmlmin');
 grunt.loadNpmTasks('grunt-contrib-concat');
 grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-contrib-imagemin');
+grunt.loadNpmTasks('grunt-contrib-copy');
 
 grunt.loadNpmTasks('grunt-contrib-watch');
 grunt.loadNpmTasks('grunt-contrib-connect');
@@ -210,6 +227,6 @@ grunt.registerTask('styles', ['sass'])
 grunt.registerTask('git', ['prompt', 'shell'])
 grunt.registerTask('server', ['connect', 'open', 'watch'])
 grunt.registerTask('screen', ['localscreenshots'])
-grunt.registerTask('default', ['imagemin', 'jshint', 'sass', 'localscreenshots', 'prompt', 'shell', 'connect', 'open', 'watch']);
+grunt.registerTask('default', ['copy', 'imagemin', 'jshint', 'sass', 'localscreenshots', 'prompt', 'shell', 'connect', 'open', 'watch']);
 
 }
